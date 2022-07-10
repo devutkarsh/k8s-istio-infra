@@ -1,0 +1,17 @@
+# istioctl operator init --hub=ghcr.io/resf/istio
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
+---
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istiocontrolplane
+spec:
+  hub: ghcr.io/resf/istio
+  profile: default
+
+# kubectl label namespace default istio-injection=enabled --overwrite

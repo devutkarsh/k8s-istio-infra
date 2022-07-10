@@ -1,0 +1,30 @@
+# apiVersion: networking.istio.io/v1alpha3
+# kind: EnvoyFilter
+# metadata:
+#   name: jwt-to-header-filter
+#   namespace: istio-system
+# spec:
+#   workloadSelector:
+#     labels:
+#       app: istio-ingressgateway
+#   configPatches:
+#   - applyTo: HTTP_FILTER
+#     match:
+#       context: GATEWAY
+#       listener:
+#         filterChain:
+#           filter:
+#             name: "envoy.http_connection_manager"
+#             subFilter:
+#               name: "envoy.router"
+#     patch:
+#       operation: INSERT_BEFORE
+#       value:
+#         name: envoy.lua
+#         config: 
+#           inlineCode: |
+#             function envoy_on_request(request_handle)
+#             local meta = request_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.jwt_authn")
+#             print(meta)
+#             request_handle:headers():add("username", "utkarsh")
+#             end
